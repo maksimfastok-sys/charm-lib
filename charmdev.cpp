@@ -1,14 +1,12 @@
 #include <jni.h>
-#include <GLES3/gl3.h>
+#include <GLES2/gl2.h>
 #include <android/log.h>
 #include <unistd.h>
-#include <sys/mman.h>
 #include <string.h>
-#include <stdint.h>
 #include <stdio.h>
 #include "imgui.h"
-#include "backends/imgui_impl_opengl3.h"
-#include "backends/imgui_impl_android.h"
+#include "imgui_impl_opengl3.h"
+#include "imgui_impl_android.h"
 
 #define LOG_TAG "Charm"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
@@ -18,37 +16,6 @@ bool g_ShowMenu = true;
 bool aimbot_active = false;
 bool wallhack_active = false;
 float aim_smooth = 5.0f;
-
-uintptr_t lib_il2cpp_base = 0;
-
-uintptr_t get_module_base(const char* module_name) {
-    FILE *fp;
-    uintptr_t addr = 0;
-    char filename[32];
-    char line[512];
-    snprintf(filename, sizeof(filename), "/proc/self/maps");
-    fp = fopen(filename, "r");
-    if (fp != NULL) {
-        while (fgets(line, sizeof(line), fp)) {
-            if (strstr(line, module_name)) {
-                sscanf(line, "%lx-%*lx", &addr);
-                break;
-            }
-        }
-        fclose(fp);
-    }
-    return addr;
-}
-
-void UpdateAimbot() {
-    if (!aimbot_active) return;
-    // Логика наведения
-}
-
-void UpdateWallhack() {
-    if (!wallhack_active || !lib_il2cpp_base) return;
-    // Логика прозрачности
-}
 
 extern "C" JNIEXPORT void JNICALL Java_com_mycompany_application_GLES3JNIView_init(JNIEnv *env, jclass clazz) {
     if (!g_Initialized) {
@@ -65,20 +32,15 @@ extern "C" JNIEXPORT void JNICALL Java_com_mycompany_application_GLES3JNIView_in
         style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.30f, 0.60f, 1.00f, 1.00f);
         
         ImGui_ImplAndroid_Init(nullptr);
-        ImGui_ImplOpenGL3_Init("#version 300 es");
-        
-        lib_il2cpp_base = get_module_base("libil2cpp.so");
-        LOGI("Base: %lx", lib_il2cpp_base);
+        ImGui_ImplOpenGL3_Init("#version 100"); // ES 2.0
         
         g_Initialized = true;
+        LOGI("ImGui initialized (ES2)");
     }
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_mycompany_application_GLES3JNIView_step(JNIEnv *env, jclass clazz) {
     if (!g_Initialized) return;
-    
-    UpdateAimbot();
-    UpdateWallhack();
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplAndroid_NewFrame();
