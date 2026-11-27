@@ -23,7 +23,7 @@ jobs:
     - name: Compile .so
       run: |
         mkdir -p jniLibs/arm64-v8a
-        $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++ -fPIC -DIMGUI_IMPL_OPENGL_ES2 -static-libstdc++ -shared -llog -lGLESv2 -landroid -Iimgui -o jniLibs/arm64-v8a/libcharmdev.so charmdev.cpp imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_widgets.cpp imgui/imgui_impl_opengl3.cpp imgui/imgui_impl_android.cpp
+        $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++ -fPIC -DIMGUI_IMPL_OPENGL_ES3 -static-libstdc++ -shared -llog -lGLESv3 -landroid -Iimgui -o jniLibs/arm64-v8a/libcharmdev.so charmdev.cpp imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_widgets.cpp imgui/imgui_impl_opengl3.cpp imgui/imgui_impl_android.cpp
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
