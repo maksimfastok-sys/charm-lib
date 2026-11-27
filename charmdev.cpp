@@ -23,6 +23,9 @@ extern "C" JNIEXPORT void JNICALL Java_com_mycompany_application_GLES3JNIView_in
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
         
+        // Добавляем дефолтный шрифт, иначе текст не отрисуется
+        io.Fonts->AddFontDefault();
+        
         ImGuiStyle& style = ImGui::GetStyle();
         style.WindowRounding = 8.0f;
         style.FrameRounding = 4.0f;
@@ -47,7 +50,10 @@ extern "C" JNIEXPORT void JNICALL Java_com_mycompany_application_GLES3JNIView_st
     ImGui::NewFrame();
 
     if (g_ShowMenu) {
+        // Принудительно ставим меню в левый верхний угол
+        ImGui::SetNextWindowPos(ImVec2(50, 50), ImGuiCond_Always);
         ImGui::SetNextWindowSize(ImVec2(350, 250), ImGuiCond_FirstUseEver);
+        
         ImGui::Begin("Charm Menu", &g_ShowMenu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
         
         ImGui::TextColored(ImVec4(0.20f, 0.50f, 0.90f, 1.00f), "Free Fire Cheats");
