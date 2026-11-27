@@ -1,5 +1,5 @@
 #include <jni.h>
-#include <GLES2/gl2.h>
+#include <GLES3/gl3.h>
 #include <android/log.h>
 #include "imgui.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -17,21 +17,20 @@ extern "C" JNIEXPORT void JNICALL Java_com_mycompany_application_GLES3JNIView_in
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
         
-        // Загружаем системный шрифт Android, чтобы избежать проблем с памятью
+        // Загружаем системный шрифт Android
         io.Fonts->AddFontFromFileTTF("/system/fonts/Roboto-Regular.ttf", 18.0f);
         
         ImGui_ImplAndroid_Init(nullptr);
-        ImGui_ImplOpenGL3_Init("#version 100");
+        ImGui_ImplOpenGL3_Init("#version 300 es"); // ES 3.0
         
         g_Initialized = true;
-        LOGI("ImGui initialized with system font");
+        LOGI("ImGui initialized with ES3");
     }
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_mycompany_application_GLES3JNIView_step(JNIEnv *env, jclass clazz) {
     if (!g_Initialized) return;
     
-    // Защита от вызова до полной инициализации контекста
     if (ImGui::GetCurrentContext() == NULL) return;
 
     ImGui_ImplOpenGL3_NewFrame();
@@ -43,7 +42,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_mycompany_application_GLES3JNIView_st
         ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_Always);
         
         ImGui::Begin("Charm Menu", &g_ShowMenu, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-        ImGui::Text("Charm Menu Active");
+        ImGui::Text("Charm Menu Active (ES3)");
         ImGui::End();
     }
 
