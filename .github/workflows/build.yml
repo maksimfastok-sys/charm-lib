@@ -16,7 +16,7 @@ jobs:
     - name: Compile .so
       run: |
         mkdir -p jniLibs/arm64-v8a
-        $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++ -shared -o jniLibs/arm64-v8a/libcharmdev.so charmdev.cpp
+        $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++ -static-libstdc++ -shared -o jniLibs/arm64-v8a/libcharmdev.so charmdev.cpp
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
