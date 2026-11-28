@@ -16,8 +16,8 @@ bool g_ShowMenu = true;
 
 // Поток для проверки загрузки
 void* CheckLoad(void* arg) {
-    sleep(5); // Ждем 5 секунд после запуска
-    FILE* f = fopen("/sdcard/CharmLoaded.txt", "w");
+    sleep(3);
+    FILE* f = fopen("/data/data/com.verba.online/files/CharmLoaded.txt", "w");
     if (f) {
         fprintf(f, "Library loaded successfully!");
         fclose(f);
